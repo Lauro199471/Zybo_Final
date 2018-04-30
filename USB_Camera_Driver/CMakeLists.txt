@@ -8,11 +8,7 @@ cmake_policy(SET CMP0046 OLD)
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   interactive_markers
-  moveit_core
-  moveit_ros_perception
-  moveit_ros_planning_interface
   pluginlib
-  tf
   cv_bridge
   image_transport
   roscpp

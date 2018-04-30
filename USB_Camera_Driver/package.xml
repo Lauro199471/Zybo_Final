@@ -2,7 +2,7 @@
 <package>
   <name>USB_Camera_Driver</name>
   <version>0.0.0</version>
-  <description>The cs_robot_lc package</description>
+  <description>The USB_Camera_Driver package</description>
   <maintainer email="Lauro199471@gmail.com">Lauro</maintainer>
   <license>TODO</license>
 

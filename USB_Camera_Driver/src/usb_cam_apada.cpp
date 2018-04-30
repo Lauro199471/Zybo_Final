@@ -15,8 +15,12 @@ public:
   cv::VideoCapture input_video;
   cv::Mat frame;
 
-  // ROS <-> OpenCV
-  cv_bridge::CvImage cvi;
+  // cv::Mat <--> sensor_msgs/Image
+  // Brige between OpenCV and ROS
+  cv_bridge::CvImage out_msg; 
+  
+  // ROS image transport for publishing and subscribing the ROS images
+  // in different compression
   image_transport::ImageTransport *it;
   image_transport::Publisher pub;
 
@@ -26,10 +30,10 @@ public:
     ros::NodeHandle n("~");
     n.param("camera_index" , id_camera , -1);
     n.param("show", show , false);
-    n.param("FPS" , FPS , 60);
+    n.param("FPS" , FPS , 1000);
 
-    cvi.header.frame_id = "image";
-    cvi.encoding = sensor_msgs::image_encodings::BGR8;
+    out_msg.header.frame_id = "image_1"; // Header used for Time Sync
+    out_msg.encoding = sensor_msgs::image_encodings::BGR8; // Image encoding ("mono8", "bgr8", etc.). 
 
     it = new image_transport::ImageTransport(n);
     pub = it->advertise("/image_raw_zybo" , 1);
@@ -52,17 +56,10 @@ public:
 
     while(ros::ok())
     {
-      input_video.read(frame);
-      cvi.image = frame;
-      cvi.header.stamp = ros::Time::now();
-      pub.publish(cvi.toImageMsg());
-
-      if(show)
-      {
-        cv::imshow("imgout.jpg",frame);
-        if(cv::waitKey(1) > 0);
-      }
-
+      input_video.read(frame); // Get Frame
+      out_msg.header.stamp = ros::Time::now(); // Get Time of when Frame was read
+      out_msg.image = frame;   // Put Frame in MSG
+      pub.publish(out_msg.toImageMsg()); // Publish MSG
       loop_rate.sleep();
     }
 
@@ -72,12 +69,8 @@ public:
 
 int main(int argc, char **argv)
 {
-   ros::init(argc, argv, "usb_cam_apada");
-
-
+  ros::init(argc, argv, "usb_cam_apada");
   std::cout << "Hello World" << std::endl;
   CameraDriver camera;
-
-
   return EXIT_SUCCESS;
 }
