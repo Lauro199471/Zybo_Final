@@ -52,14 +52,14 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 ###################################################
 ## Declare a cpp executable
-add_executable(usb_cam_apada src/usb_cam_apada.cpp)
+add_executable(usb_cam_driver src/usb_cam_driver.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-add_dependencies(usb_cam_apada USB_Camera_Driver_generate_messages_cpp)
+add_dependencies(usb_cam_driver USB_Camera_Driver_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(usb_cam_apada
+target_link_libraries(usb_cam_driver
    ${catkin_LIBRARIES}
    ${OpenCV_LIBS}
  )
