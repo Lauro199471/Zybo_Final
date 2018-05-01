@@ -5,55 +5,43 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 
-
-class CameraDriver
+#define id_camera -1
+#define FPS 60
+#define kHz 1000
+int main(int argc, char **argv)
 {
-public:
-  int id_camera;
-  int FPS;
-  bool show;
-  cv::VideoCapture input_video;
-  cv::Mat frame;
-
-  // cv::Mat <--> sensor_msgs/Image
-  // Brige between OpenCV and ROS
-  cv_bridge::CvImage out_msg; 
-  
-  // ROS image transport for publishing and subscribing the ROS images
-  // in different compression
-  image_transport::ImageTransport *it;
-  image_transport::Publisher pub;
-
-  // Constructor
-  CameraDriver()
-  {
+    ros::init(argc, argv, "usb_cam_apada");
     ros::NodeHandle n("~");
-    n.param("camera_index" , id_camera , -1);
-    n.param("show", show , false);
-    n.param("FPS" , FPS , 1000);
 
-    out_msg.header.frame_id = "image_1"; // Header used for Time Sync
-    out_msg.encoding = sensor_msgs::image_encodings::BGR8; // Image encoding ("mono8", "bgr8", etc.). 
+    std::cout << "\n(Long Beach State:CECS461)Zybo USB Camera Driver Initiated...\n";
 
+    // ROS image transport for publishing and subscribing the ROS images
+    // in different compression
+    image_transport::ImageTransport *it;
     it = new image_transport::ImageTransport(n);
+
+    // cv::Mat <--> sensor_msgs/Image
+    // Brige between OpenCV and ROS
+    cv_bridge::CvImage out_msg;
+    out_msg.header.frame_id = "image_1"; // Header used for Time Sync
+    out_msg.encoding = sensor_msgs::image_encodings::BGR8; // Image encoding ("mono8", "bgr8", etc.)
+
+    // Setup ROS topic
+    image_transport::Publisher pub;
     pub = it->advertise("/image_raw_zybo" , 1);
 
-    if(id_camera == -1)
-    {
-      ROS_WARN("Camera's id was not recieved");
-      ROS_WARN("I will open every camera that I find");
-    }
-
+    // Setup Camera
+    cv::Mat frame;
+    cv::VideoCapture input_video;
     input_video.open(id_camera);
     input_video.set(CV_CAP_PROP_FPS,FPS);
-
     if(!input_video.isOpened())
     {
       ROS_ERROR("Couldnt open camera");
       ros::shutdown();
     }
-    ros::Rate loop_rate(FPS);
 
+    ros::Rate loop_rate(1 * kHz);
     while(ros::ok())
     {
       input_video.read(frame); // Get Frame
@@ -63,14 +51,5 @@ public:
       loop_rate.sleep();
     }
 
-  }
-
-};
-
-int main(int argc, char **argv)
-{
-  ros::init(argc, argv, "usb_cam_apada");
-  std::cout << "Hello World" << std::endl;
-  CameraDriver camera;
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
