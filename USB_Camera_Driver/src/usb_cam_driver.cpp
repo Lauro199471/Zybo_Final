@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
     // Setup ROS topic
     image_transport::Publisher pub;
-    pub = it->advertise("/image_raw_zybo" , 1);
+    pub = it->advertise("/image_raw_zybo" , 1000, true);
 
     // Setup Camera
     cv::Mat frame;
