@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>USB_Camera_Driver</name>
+  <name>zybo_color_tracking_CECS_461</name>
   <version>0.0.0</version>
   <description>The USB_Camera_Driver package</description>
   <maintainer email="Lauro199471@gmail.com">Lauro</maintainer>

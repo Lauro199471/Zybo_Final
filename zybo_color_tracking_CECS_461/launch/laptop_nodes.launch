@@ -1,0 +1,3 @@
+<launch> 
+    <node name= "color_tracking" pkg= "zybo_color_tracking_CECS_461" type= "color_tracking" />
+</launch> 

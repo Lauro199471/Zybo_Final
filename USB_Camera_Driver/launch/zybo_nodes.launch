@@ -1,3 +1,0 @@
-<launch> 
-    <node name= "usb_camera_driver" pkg= "USB_camera_Driver" type= "usb_camera_driver" />
-</launch> 

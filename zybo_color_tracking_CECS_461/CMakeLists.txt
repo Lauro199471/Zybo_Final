@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(USB_Camera_Driver)
+project(zybo_color_tracking_CECS_461)
 cmake_policy(SET CMP0046 OLD)
 
 ## Find catkin macros and libraries

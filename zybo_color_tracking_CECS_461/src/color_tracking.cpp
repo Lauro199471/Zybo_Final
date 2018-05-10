@@ -51,6 +51,7 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg)
 
   //show the thresholded image
   imshow("Color Tracking", frameFilter);
+  imshow("Raw", imgOriginal);
   cv::waitKey(1);
 }
 
